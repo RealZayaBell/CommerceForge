@@ -55,3 +55,13 @@ It is a **backend engine** that businesses integrate with to create **their own 
 ✔️ Payment abstraction layer  
 ✔️ Microservice event-driven architecture  
 ✔️ Integration-ready REST APIs
+
+## 🖥️ Tech Stack
+
+- .NET 9
+- Microservices Architecture
+- Entity Framework Core
+- PostgreSQL (schema-per-tenant)
+- RabbitMQ 
+- Docker & Docker Compose
+- Clean Architecture + DDD principles
