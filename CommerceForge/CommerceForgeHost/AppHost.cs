@@ -2,11 +2,8 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 
 
-var postgres = builder.AddPostgres("db");
-var usersApi = builder.AddProject<Projects.TenantService>("Tenants")
+var postgres = builder.AddPostgres("CommerceForge").AddDatabase("TenantDb");
+var usersApi = builder.AddProject<Projects.TenantService_API>("Tenants")
                       .WithReference(postgres);
 
-
-
-
-builder.Build().Run();
+await builder.Build().RunAsync();
