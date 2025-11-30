@@ -17,34 +17,45 @@ namespace TenantService.Controllers
                 {
                     case ResponseCode.Ok:
                         {
-                            result.Message = string.IsNullOrEmpty(result.Message) ? ResponseCode.Ok.ToDescription() : result.Message;
+                            result.Message = ChooseMessage(ResponseCode.Ok, result);
                             return Ok(result);
                         }
+                    case ResponseCode.Created:
+                        {
+                            result.Message = ChooseMessage(ResponseCode.Created, result);
+                            return Created(new Uri(""), result);
+                        }
+                    case ResponseCode.Accepted:
+                        {
+                            result.Message = ChooseMessage(ResponseCode.Accepted, result);
+                            return Accepted(result);
+                        }
+
                     case ResponseCode.Failed:
                         {
-                            result.Message = string.IsNullOrEmpty(result.Message) ? FailureMessage : result.Message;
+                            result.Message = ChooseMessage(ResponseCode.Failed, result);
                             return BadRequest(result);
                         }
                     case ResponseCode.ValidationError:
                         {
-                            result.Message = string.IsNullOrEmpty(result.Message) ? FailureMessage : result.Message;
+                            result.Message = ChooseMessage(ResponseCode.ValidationError, result);
                             return BadRequest(result);
                         }
 
                     case ResponseCode.AuthorizationError:
                         {
-                            result.Message = ResponseCode.AuthorizationError.ToDescription();
+                            result.Message = ChooseMessage(ResponseCode.AuthorizationError, result);
                             return Unauthorized(result);
                         }
 
                     case ResponseCode.NotFound:
                         {
-                            result.Message = string.IsNullOrEmpty(result.Message) ? ResponseCode.NotFound.ToDescription() : result.Message;
+                            result.Message = ChooseMessage(ResponseCode.NotFound, result);
                             return NotFound(result);
                         }
                     case ResponseCode.TenantDisabled:
                         {
-                            result.Message = string.IsNullOrEmpty(result.Message) ? ResponseCode.TenantDisabled.ToDescription() : result.Message;
+                            result.Message = ChooseMessage(ResponseCode.TenantDisabled, result);
                             return Ok(result);
                         }
                     default:
@@ -64,7 +75,11 @@ namespace TenantService.Controllers
             }
         }
 
-        private string GenerateMessage(string FieldMessage, string Response)
+        private static string ChooseMessage<T>(ResponseCode code, ActionResponse<T> result)
+        {
+            return string.IsNullOrEmpty(result.Message) ? code.ToDescription() : result.Message;
+        }
+        private static string GenerateMessage(string FieldMessage, string Response)
         {
             return string.IsNullOrEmpty(FieldMessage) ? Response : FieldMessage;
         }

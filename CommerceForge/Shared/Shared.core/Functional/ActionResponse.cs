@@ -20,7 +20,7 @@ public class ActionResponse
 
 public class ActionResponse<T> : ActionResponse
 {
-    public T Result { get; set; }
+    public T Data { get; set; }
 
     public ActionResponse<object> ToObject()
     {
@@ -29,13 +29,13 @@ public class ActionResponse<T> : ActionResponse
             Response = this.Response,
             Message = this.Message,
             FailureReasons = this.FailureReasons,
-            Result = this.Result
+            Data = this.Data
         };
     }
 
     public static ActionResponse<T> Success(T result, string message)
     {
-        ActionResponse<T> response = new() { Response = ResponseCode.Ok, Result = result, Message = message };
+        ActionResponse<T> response = new() { Response = ResponseCode.Ok, Data = result, Message = message };
 
         return response;
     }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TenantService.Domain.Entities.Common.Interface
+namespace Shared.core.Abstractions.Entities
 {
     public interface ISoftDeletable
     {

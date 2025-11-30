@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\Response\" />
+    <ProjectReference Include="..\..\..\Shared.core\Shared.core.csproj" />
+    <ProjectReference Include="..\..\..\Shared\Shared.core\Shared.core.csproj" />
+    <ProjectReference Include="..\TenantService.Domain\TenantService.Domain.csproj" />
+    <ProjectReference Include="..\TenantService.Infrastructure\TenantService.Infrastructure\TenantService.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

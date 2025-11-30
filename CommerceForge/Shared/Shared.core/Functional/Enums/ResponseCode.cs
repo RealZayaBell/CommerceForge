@@ -12,19 +12,25 @@ public enum ResponseCode
     [Description("Request was successful")]
     Ok = 0,
 
+    [Description("Resource Created")]
+    Created = 1,
+
+    [Description("Request Accepted")]
+    Accepted = 2,
+
     [Description("Invalid details supplied")]
-    ValidationError = 1,
+    ValidationError,
 
     [Description("No record found")]
-    NotFound = 2,
+    NotFound,
 
     [Description("Request failed. Please try again")]
-    Failed = 3,
+    Failed,
 
     [Description("Authentication failed. Please try again with the right credentials")]
-    AuthorizationError = 4,
+    AuthorizationError,
 
     [Description("The tenant is disabled")]
-    TenantDisabled = 5,
+    TenantDisabled,
 }
 
