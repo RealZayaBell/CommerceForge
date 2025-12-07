@@ -13,7 +13,7 @@ using TenantService.Infrastructure.Repositories;
 
 namespace TenantService.Application.Services.Implementation
 {
-    public class TenantServices(TenantRepository tenantRepo) : ITenantService
+    public class TenantServices(ITenantRepository tenantRepo) : ITenantService
     {
         public async Task<ActionResponse<CreateTenantResponse>> CreateTenant(CreateTenantRequest tenant)
         {
@@ -38,7 +38,7 @@ namespace TenantService.Application.Services.Implementation
                 await tenantRepo.AddTenantAsync(newTenant);
                 await tenantRepo.SaveChangesAsync();
                 // TODO: Call Identity Service to create tenant admin user (I'll use memory message bus with a OnTenantCreationEvent)
-                // Another TODO: Schema creation for the tenant ()
+                // Another TODO: Schema creation for the tenant () prolly background job with hangfire or quart.net
                 // Another TODO: Send welcome email to tenant admin (I'll use observer pattern)
 
                 var tenantResponse = new CreateTenantResponse(
@@ -49,7 +49,7 @@ namespace TenantService.Application.Services.Implementation
                     newTenant.AdminEmail,
                     newTenant.Plan.ToString());
 
-                response.Data = tenantResponse;
+                response = ActionResponse<CreateTenantResponse>.Success(tenantResponse, "Tenant created successfully");
             }
             catch (Exception ex)
             {
