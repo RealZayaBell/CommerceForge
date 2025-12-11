@@ -15,5 +15,6 @@ namespace TenantService.Domain.Entities
         public string AdminEmail { get; set; } = default!;
         public Plan Plan { get; set; } = Plan.Free;
         public TenantStatus Status { get; set; } = TenantStatus.Active;
+        public string Schema { get; set; } = default!;
     }
 }

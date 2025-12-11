@@ -21,6 +21,14 @@ string Domain,
 string AdminEmail,
 
 [Required]
+[MinLength(2)]
+string AdminFirstname,
+
+[Required]
+[MinLength(2)]
+string AdminLastname,
+
+[Required]
 [MaxLength(50)]
 string Plan
 );

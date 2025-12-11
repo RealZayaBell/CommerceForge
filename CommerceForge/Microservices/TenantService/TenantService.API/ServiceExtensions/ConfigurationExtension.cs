@@ -19,7 +19,8 @@ namespace TenantService.API.ServiceExtensions
 
         public static void AddDbConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            if (configuration.GetConnectionString("postgres") is not { Length: > 0 })
+            var configString = configuration.GetConnectionString("TenantDb");
+            if (configuration.GetConnectionString("TenantDb") is not { Length: > 0 })
                 services.AddDbContext<TenantDbContext>(options =>
                     options.UseNpgsql(configuration.GetConnectionString("TenantConnection")));
         }

@@ -4,7 +4,7 @@ namespace TenantService
 {
     public static class Startup
     {
-        public static void ConfigureServices(this IServiceCollection services)
+        public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Add services to the container.
             services.AddControllers();
@@ -13,6 +13,7 @@ namespace TenantService
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             services.AddOpenApi();
             services.AddAplicationServices();
+            services.AddDbConfiguration(configuration);
         }
 
         public static void ConfigurePipelines(this WebApplication app)
