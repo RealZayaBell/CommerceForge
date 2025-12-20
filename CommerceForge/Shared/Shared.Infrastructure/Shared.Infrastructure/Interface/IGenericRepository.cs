@@ -13,6 +13,7 @@ namespace Shared.Infrastructure.Interface
         Task<int> DeleteRangeAsync(IList<TEntity> entities);
         Task<List<TEntity>> FilterAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "", int? page = null, int? pageSize = null);
         Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> match);
+        Task<TEntity?> GetByKey(int id);
         IQueryable<TEntity> FindBy(Expression<Func<TEntity, bool>> predicate);
         IQueryable<TEntity> Query();
         TEntity Update(TEntity entity);

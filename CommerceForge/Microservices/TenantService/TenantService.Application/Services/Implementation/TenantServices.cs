@@ -1,10 +1,13 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Npgsql;
 using Shared.core.Functional;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TenantService.Application.DTOs.Requests;
 using TenantService.Application.DTOs.Response;
@@ -16,7 +19,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TenantService.Application.Services.Implementation
 {
-    public class TenantServices(ITenantRepository tenantRepo, IConfiguration configuration) : ITenantService
+    public class TenantServices(ITenantRepository tenantRepo, IConfiguration configuration, IMapper mapper) : ITenantService
     {
         public async Task<ActionResponse<CreateTenantResponse>> CreateTenant(CreateTenantRequest tenant)
         {
@@ -36,7 +39,7 @@ namespace TenantService.Application.Services.Implementation
                     Domain = tenant.Domain,
                     AdminEmail = tenant.AdminEmail,
                     Plan = Enum.Parse<Plan>(tenant.Plan),
-                    Schema = tenant.Domain.Split(".")[0]
+                    Schema = Regex.Split(tenant.Domain, @"\.(?=[^.]+$)")[0]
                 };
                 using (var sqlWriter = new NpgsqlConnection(configuration.GetConnectionString("TenantDb")))
                 {
@@ -69,9 +72,72 @@ namespace TenantService.Application.Services.Implementation
                 Console.WriteLine(ex.Message);
                 response = ActionResponse<CreateTenantResponse>.Failed("An error occurred");
                 response.FailureReasons = ["Server error"];
-                return response;
             }
             return response;
+        }
+
+        public async Task<ActionResponse<GetTenantResponse>> GetTenantById(int tenantId)
+        {
+            ActionResponse<GetTenantResponse> response = new();
+            try
+            {
+                Tenant? tenant = await tenantRepo.GetTenantAsync(tenantId);
+                if (tenant == null)
+                {
+                    response = ActionResponse<GetTenantResponse>.Failed("Tenant not found");
+                    response.FailureReasons = ["Tenant not found"];
+                    return response;
+                }
+
+                GetTenantResponse tenantResponse = mapper.Map<GetTenantResponse>(tenant);
+                response = ActionResponse<GetTenantResponse>.Success(tenantResponse, "Tenant retrieved successfully");
+            }
+            catch(Exception ex)
+            {
+                response = ActionResponse<GetTenantResponse>.Failed("An error occurred");
+                response.FailureReasons = ["Server error"];
+            }
+            return response;
+        }
+
+        public async Task<ActionResponse<>> UpdateTenantById(int id, UpdateTenantRequest upDetails)
+        {
+            ActionResponse response = new();
+            try
+            {
+                Tenant? tenant = await tenantRepo.GetTenantAsync(id);
+                if (tenant == null)
+                {
+                    response = ActionResponse<GetTenantResponse>.Failed("Tenant not found");
+                    response.FailureReasons = ["Tenant not found"];
+                    return response;
+                }
+
+                foreach (var prop in typeof(UpdateTenantRequest).GetProperties())
+                {                    
+                    object? value = prop.GetValue(upDetails);
+
+                    if (value != null)
+                    {
+                        Type dataType = prop.PropertyType;
+                        if (dataType == typeof(string) && !string.IsNullOrWhiteSpace(value.ToString()))
+                        {
+                            value = value?.ToString()?.Trim();
+                        }
+                        else if (dataType.IsEnum)
+                        {
+                            value = Enum.ToObject(dataType, value);
+                        }
+                        PropertyInfo? entityProp = typeof(Tenant).GetProperty(prop.Name);
+                        entityProp?.SetValue(tenant, value);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
         }
     }
 }

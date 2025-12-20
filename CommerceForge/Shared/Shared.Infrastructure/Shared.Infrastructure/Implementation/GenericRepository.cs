@@ -105,12 +105,12 @@ namespace Shared.Infrastructure.Implementation
             context.Entry(entity).State = EntityState.Modified;
             return entity;
         }
-        #endregion
         public async Task<IList<TEntity>> UpdateRangeAsync(IList<TEntity> entities)
         {
             context.Set<TEntity>().UpdateRange(entities);
             return entities;
         }
+        #endregion
 
         #region Delete Methods
         // For Delete
@@ -160,7 +160,6 @@ namespace Shared.Infrastructure.Implementation
         #endregion
 
         #region Querying
-        // Querying
 
         public IQueryable<TEntity> Query()
             => context.Set<TEntity>();
@@ -170,6 +169,9 @@ namespace Shared.Infrastructure.Implementation
 
         public async Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> match)
             => await context.Set<TEntity>().SingleOrDefaultAsync(match);
+
+        public async Task<TEntity?> GetByKey(int id)
+            => await context.Set<TEntity>().FindAsync(id);
 
         public async Task<List<TEntity>> FilterAsync(
             Expression<Func<TEntity, bool>> filter = null,

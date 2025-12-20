@@ -7,5 +7,6 @@ namespace TenantService.Application.Services.Interfaces
     public interface ITenantService
     {
         Task<ActionResponse<CreateTenantResponse>> CreateTenant(CreateTenantRequest tenant);
+        Task<ActionResponse<GetTenantResponse>> GetTenantById(int tenantId);
     }
 }

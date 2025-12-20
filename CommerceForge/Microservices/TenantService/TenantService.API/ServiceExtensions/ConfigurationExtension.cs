@@ -5,6 +5,7 @@ using Shared.Infrastructure.Interface;
 using Shared.Infrastructure.Implementation;
 using TenantService.Infrastructure.DataAcess;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace TenantService.API.ServiceExtensions
 {
@@ -12,6 +13,7 @@ namespace TenantService.API.ServiceExtensions
     {
         public static void AddAplicationServices(this IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(MappingProfile));
             services.AddScoped<IUnitOfWork, UnitOfWork<TenantDbContext>>();
             services.AddScoped<ITenantService, TenantServices>();
             services.AddScoped<ITenantRepository, TenantRepository>();
