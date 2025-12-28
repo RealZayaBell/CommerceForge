@@ -1,4 +1,5 @@
 ﻿using Shared.core.Functional;
+using System.Threading.Tasks;
 using TenantService.Application.DTOs.Requests;
 using TenantService.Application.DTOs.Response;
 
@@ -8,5 +9,6 @@ namespace TenantService.Application.Services.Interfaces
     {
         Task<ActionResponse<CreateTenantResponse>> CreateTenant(CreateTenantRequest tenant);
         Task<ActionResponse<GetTenantResponse>> GetTenantById(int tenantId);
+        Task<ActionResponse<bool>> UpdateTenantById(int id, UpdateTenantRequest upDetails);
     }
 }

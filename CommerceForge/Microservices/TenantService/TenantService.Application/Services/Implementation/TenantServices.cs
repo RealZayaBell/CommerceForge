@@ -100,15 +100,16 @@ namespace TenantService.Application.Services.Implementation
             return response;
         }
 
-        public async Task<ActionResponse<>> UpdateTenantById(int id, UpdateTenantRequest upDetails)
+        public async Task<ActionResponse<bool>> UpdateTenantById(int id, UpdateTenantRequest upDetails)
         {
-            ActionResponse response = new();
+            ActionResponse<bool> response = new();
             try
             {
                 Tenant? tenant = await tenantRepo.GetTenantAsync(id);
                 if (tenant == null)
                 {
-                    response = ActionResponse<GetTenantResponse>.Failed("Tenant not found");
+                    response = ActionResponse<bool>.Failed("Tenant not found");
+                    response.Data = false;
                     response.FailureReasons = ["Tenant not found"];
                     return response;
                 }
@@ -132,12 +133,18 @@ namespace TenantService.Application.Services.Implementation
                         entityProp?.SetValue(tenant, value);
                     }
                 }
+
+                var newT = await tenantRepo.UpdateTenantAsync(tenant);
+                response = ActionResponse<bool>.Success(true, "Tenant retrieved successfully");
+
             }
             catch (Exception ex)
             {
-
+                response = ActionResponse<bool>.Failed("An error occurred");
+                response.Data = false;
+                response.FailureReasons = ["Server error"];
             }
-
+            return response;
         }
     }
 }

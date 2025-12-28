@@ -7,6 +7,7 @@ namespace TenantService.Infrastructure.Repositories
         Task<Tenant> AddTenantAsync(Tenant tenant);
         Task<Tenant?> GetTenantAsync(int Id);
         Task<Tenant?> GetByDomainAsync(string domain);
+        Task<Tenant> UpdateTenantAsync(Tenant tenant);
         Task SaveChangesAsync();
     }
 }

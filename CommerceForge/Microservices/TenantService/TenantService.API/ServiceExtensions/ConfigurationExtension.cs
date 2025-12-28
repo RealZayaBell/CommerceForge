@@ -6,6 +6,7 @@ using Shared.Infrastructure.Implementation;
 using TenantService.Infrastructure.DataAcess;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using TenantService.API.Helpers;
 
 namespace TenantService.API.ServiceExtensions
 {
